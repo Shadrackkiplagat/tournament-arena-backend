@@ -46,7 +46,6 @@ app.use(cors({
 }));
 
 // Handle preflight globally
-app.options('*', cors());
 
 app.use(cors({
   origin: function(origin, callback) {
