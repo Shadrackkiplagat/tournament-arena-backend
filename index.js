@@ -22,13 +22,32 @@ if (!fs.existsSync(uploadsDir)) {
 // ===== MIDDLEWARE =====
 
 // CORS Configuration - Update with your actual frontend URLs
+// ===== CORS Allowed Origins =====
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3001',
   'http://localhost:5173',
-  'https://your-frontend-domain.netlify.app', // Replace with your actual frontend URL
-  'https://your-admin-portal.netlify.app', // Replace with your actual admin URL
+  'https://games-management-portal.netlify.app',
+  'https://gms-admin-portal.netlify.app',
 ];
+
+
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
+
+  next();
+});
 
 app.use(cors({
   origin: function(origin, callback) {
